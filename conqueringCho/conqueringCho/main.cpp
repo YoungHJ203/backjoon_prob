@@ -3,21 +3,8 @@
 
 using namespace std;
 
-class setOfSection {	// set of conquering sections
-public:
-	int first;			// first section in a set
-	int second;			// second section in a set
-	int overlapNum;		// the number of sections overlapped
-
-	// checking if those sections are overlapped
-	bool isOverlapped(setOfSection a) {
-		if (this->first == a.first || this->first == a.second || this->second == a.first || this->second == a.second) {
-			return true;
-		}
-		return false;
-	}
-};
-
+int min(int,int,int);
+int min(int, int);
 
 int main(){
 	int testCase;	// the number of test cases
@@ -28,7 +15,9 @@ int main(){
 	for (int i = 0; i < testCase; i++) {
 		int numSec;					// the half number of sections
 		int numPlat;				// the number of platoon members
-		
+		int minPlat[4];				// minimum of platoon in each state ; 0: no section in (i-1) column, 1:lower section in (i-1) column, 2:upper section in (i-1) column, 3:full section in (i-1) column
+		int temp[4];				// temporarily store the minimum of platoon in i column
+
 		// get the number of sections and number of platoon members
 		cin >> numSec >> numPlat;
 
@@ -38,16 +27,44 @@ int main(){
 		for (int j = 0; j < 2; j++) {
 			for (int k = 0; k < numSec; k++) {
 				cin >> enemy[j][k];
+			}
+		}
 
-				// check if continuous sections can be simultanously conquered
-				if (k > 0 && enemy[j][k-1]+ enemy[j][k]<=numPlat) {
-					
-				}
+		// initialization of minimun of platoon
+		minPlat[0] = 0;
+		minPlat[1] = 1;
+		minPlat[2] = 1;
+		minPlat[3] = (enemy[0][0] + enemy[1][0] <= numPlat ? 1 : 2);
+
+		// 
+		for (int j = 0; j < numSec; j++) {
+			// update 0 state in i column
+			if (enemy[0][j]+enemy[1][j]<=numPlat) {
+				temp[0] = min();
+			}
+			else {
+			
 			}
 
-			if (enemy[j][numSec-1] + enemy[j][0] <= numPlat) {
-				
+			if () {
+
 			}
 		}
 	}
+}
+
+int min(int a, int b, int c) {
+	int min = a;
+	if (min > b) {
+		min = b;
+	}
+	if (min > c) {
+		min = c;
+	}
+
+	return min;
+}
+
+int min(int a, int b) {
+	return (a > b ? b : a);
 }
