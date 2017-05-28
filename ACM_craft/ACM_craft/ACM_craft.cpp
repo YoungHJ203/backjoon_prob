@@ -1,10 +1,41 @@
 #include<iostream>
+#include<functional>
 #include<list>
+#include<vector>
 #include<queue>
 #include<map>
-#include<vector>
 
 using namespace std;
+
+void topoSort(vector<list<int>> &adjacentList, vector<int> &topoArray, vector<int> &entryNum) {
+	priority_queue<int,vector<int>, greater<int> > pq;		// to store and quickly get the building number to construct
+	int size = adjacentList.size();
+
+	// sequential search
+	for (int i = 0; i < size; i++) {
+		if (entryNum[i] == 0) {		// the case that 'i' is final point
+			pq.push(i);
+		}
+	}
+
+	// topological sort
+	for(int i=0;i<size;i++){
+		int current = pq.top();
+		pq.pop();	
+		
+		// add the current work to totoArray
+		topoArray.insert(topoArray.begin(),current);
+
+		// update entry number array
+		list<int>::iterator lit = adjacentList[current].begin();
+		while (lit!=adjacentList[current].end()) {
+			if (--entryNum[*lit]==0) {
+				pq.push(*lit);
+			}
+			lit++;
+		}
+	}
+}
 
 int main() {
 	// the number of cases
@@ -14,27 +45,25 @@ int main() {
 
 	// implement all cases
 	for (int i = 0; i < caseNum; i++) {
-		int bN, rN;					// the number of bulidings and rules
-		map<int, int> checkMap;		// list to check
-		priority_queue<int> pq;		// to store and quickly get the building number to construct
+		int bN, rN;						// the number of bulidings and rules
+		vector<int> topoArray;			// topological sorted array for construction work
+		map<int, int> checkMap;			// list to check
+		int finish, first;				// final and first building numbers
+		vector<int>::iterator it;		// to search the prework list
+		int maxTime = 0;				// max time to finish the work
 
-
+		cin >> bN >> rN;		
 		
-		list<int>::iterator it;
-		int maxTime = 0;	// max time to finish the work
-
-		cin >> bN >> rN;
-
 		// construction period for each building ,total time to finish the construction and next work of a work
-		vector<int> conPeriod(bN), totalTime(bN), next(bN);
-
+		vector<int> constructP(bN,0), totalTime(bN,0), entryNum(bN,0), next(bN,0);
+		
 		// prework list
 		vector<list<int>> preWork(bN);
-
-		// all needed time to construct each building
+		
+		// enter needed time to construct each building
 		for (int i = 0; i < bN; i++) {
-			cin >> conPeriod[i];
-			totalTime[i] = 0;
+			cin >> constructP[i];
+			totalTime[i] = constructP[i];
 		}
 
 		// get the rule between the prework and the postwork
@@ -45,55 +74,62 @@ int main() {
 
 			// store the relationship betweem the prework and postwork
 			preWork[post - 1].push_back(pre - 1);
+
+			// increase the number of going out path to next node
+			entryNum[pre - 1]++;
 		}
 
+		// topological sort
+		topoSort(preWork, topoArray, entryNum);
 
-		int finish;		// building number
-
-						// get building number to construct
+		// get building number to construct
 		cin >> finish;
 
-		toCheck[finish - 1] = finish - 1;
-		history[finish] = finish;
-		totalTime[finish - 1] = conPeriod[finish - 1];
-		next[finish - 1] = 0;
+		// search the location in the topological array
+		it = topoArray.begin();
+		while (*it!=finish-1) {
+			it++;
+		}
+		
+		// add final work to check list
+		checkMap[finish-1] = finish-1;
 
-		// check all possible routes
-		while (!toCheck.empty()) {
-			int current;
+		// initialize max time and next work array
+		maxTime = constructP[finish - 1];
+		next[finish - 1] = finish - 1;
 
-			// check if the current work should be considered
-			current = toCheck.begin()->first;
-			toCheck.erase(current);
+		// get the max time 
+		while (it != topoArray.begin()) {
+			int current=*it;
 
-			//totalTime[current] = totalTime[current] + conPeriod[current];
+			// in the case that '*it' work is needed to be checked
+			if (checkMap.count(current)) {
+				list<int>::iterator pre = preWork[current].begin();
 
-			cout << current + 1 << endl;
+				while (pre != preWork[current].end()) {
+					// check if new time is larger than the previous one
+					if (totalTime[*pre] < totalTime[current] + constructP[*pre]) {
+						totalTime[*pre] = totalTime[current] + constructP[*pre];
 
-			it = preWork[current].begin();
+						next[*pre] = current;
+						checkMap[*pre] = *pre;
 
-			// store the prework of current work to check in list
-			while (it != preWork[current].end()) {
-
-				// check the prework to be considered for max time
-				if (totalTime[current] + conPeriod[*it] > totalTime[*it]) {
-					totalTime[*it] = totalTime[current] + conPeriod[*it];		// update the total time to finish the final work
-					next[*it] = current;										// update the next work of prework
-
-																				// update the max time
-					if (totalTime[*it] > maxTime) {
-						maxTime = totalTime[*it];
+						// check if these total time is max value
+						if (maxTime < totalTime[*pre]) {
+							maxTime = totalTime[*pre];
+							first = *pre;
+							next[first] = current;
+						}
 					}
-				}
 
-				// case that we didn't check the prework before
-				if (history[*it + 1] != *it + 1) {
-					toCheck[*it] = *it;			// store the prework
-					history[*it + 1] = *it + 1;
+					pre++;
 				}
-
-				it++;
 			}
+
+			checkMap.erase(current);
+			
+			it--;
+			
 		}
 
 		cout << maxTime << endl;
