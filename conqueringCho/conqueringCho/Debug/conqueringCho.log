@@ -1,3 +1,4 @@
 ﻿  main.cpp
+c:\users\young\gitproject\baekjoon_prob\conqueringcho\conqueringcho\main.cpp(131): warning C4018: '<': signed/unsigned mismatch
   conqueringCho.vcxproj -> C:\Users\Young\gitProject\baekjoon_prob\conqueringCho\Debug\conqueringCho.exe
   conqueringCho.vcxproj -> C:\Users\Young\gitProject\baekjoon_prob\conqueringCho\Debug\conqueringCho.pdb (Full PDB)
