@@ -34,6 +34,8 @@ int main(){
 		// making half sets of points recursively
 		recurSearch(point,index,-1,pointNum/2,pointNum,min);
 		
+		cout.setf(ios::fixed);
+		cout.precision(6);
 		cout << min << endl;
 	}
 
