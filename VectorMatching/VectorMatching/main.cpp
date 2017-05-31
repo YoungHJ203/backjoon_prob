@@ -46,14 +46,14 @@ void recurSearch(vector<vector<double>> &point, vector<int> &index, int now,int 
 	
 	for (int i = now + 1; i < pointNum- count + 1; i++) {
 
-		index[count-1]=i;
+		index[pointNum/2 - count]=i;
 
 		// compare the new set with old set for checking which sets are better
 		if (count == 1) {
 			check(point, index, min);
 		}
 		else {
-			recurSearch(point, index, i, count--, pointNum,min);
+			recurSearch(point, index, i, count-1, pointNum,min);
 		}
 	}
 }
@@ -68,7 +68,7 @@ void check(vector<vector<double>> &point,vector<int> &index, double &min) {
 
 	vector<int>::iterator it = index.begin();
 
-	for (int i = 0; i < point.size(); i++) {
+	for (int i = 0; i < point[0].size(); i++) {
 		if (it != index.end())
 			if (i == *it) {
 				x1 += point[0][i];
