@@ -1,7 +1,5 @@
 #include<iostream>
 #include<stdbool.h>
-#define ENTER 10
-
 using namespace std;
 
 // node class
@@ -147,7 +145,7 @@ int main() {
 		
 		switch (c) {
 		case 'P': {cin >> c; editor.addBefore(cursor + 1, c); cursor++; break; }
-		case 'B': {editor.delBefore(cursor + 1); cursor--; break; }
+		case 'B': {if (cursor > 0) { editor.delBefore(cursor + 1); cursor--; } break; }
 		case 'L': {if(cursor>0) cursor--; break; }
 		case 'D': {if (cursor < editor.getSize()) cursor++; break; }
 		default: {break;}
