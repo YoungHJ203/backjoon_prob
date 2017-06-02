@@ -36,10 +36,6 @@ public:
 		size = 0;
 	}
 
-	node<T>* getTrailer() {
-		return this->trailer;
-	}
-
 	// check if this list is empty
 	bool empty() {
 		if (this->size == 0)
@@ -76,38 +72,47 @@ public:
 		this->size++;
 	}
 
-	// add a new node after the reference node
-	node<T>* addAfter(node<T>* reference, T ele) {
+	// add a new node before 'index'th node
+	void addBefore(int index, T ele) {
 		node<T>* newNode = new node<T>(ele);
+		node<T>* reference = this->head;
+
+		if (index > this->size + 1) {
+			cout << "Wrong index (addBefore)" << endl;
+			exit(0);
+		}
+
+		for (int i = 0; i < index; i++) {
+			reference = reference->next;
+		}
 		
-		newNode->pre = reference;
-		newNode->next = reference->next;
-		reference->next->pre = newNode;
-		reference->next = newNode;
+		newNode->pre = reference->pre;
+		newNode->next = reference;
+		reference->pre->next = newNode;
+		reference->pre = newNode;
 
 		this->size++;
-		
-		return newNode;
 	}
 
-	// delete the reference node
-	node<T>* del(node<T>* reference) {
-		node<T>* temp;
+	// delete a node before 'index'th node
+	void delBefore(int index) {
+		node<T>* reference = this->head;
 
-		if (reference != this->head) {
-			temp = reference->pre;
-			reference->pre->next = reference->next;
-			reference->next->pre = reference->pre;
-
-			delete reference;
-
-			this->size--;
-
-			return temp;
+		if (index > this->size +1 ) {
+			cout << "Wrong index (delBefore)" << endl;
+			exit(0);
 		}
-		else {
-			return reference;
+
+		for (int i = 0; i < index-1; i++) {
+			reference = reference->next;
 		}
+
+		reference->pre->next = reference->next;
+		reference->next->pre = reference->pre;
+
+		delete reference;
+
+		this->size--;
 	}
 
 private:
@@ -120,7 +125,6 @@ int main() {
 	char c=0;
 	int cursor = 0;
 	int commandNum = 0;
-	node<char>* refer;
 	list<char> editor;
 	
 	// enter characters
@@ -131,7 +135,6 @@ int main() {
 
 	// move the cursor at the end of editor
 	cursor = editor.getSize();
-	refer = editor.getTrailer()->pre;
 
 	// enter the number of commands
 	cin >> commandNum;
@@ -141,26 +144,10 @@ int main() {
 		cin >> c;
 		
 		switch (c) {
-		case 'P': {	
-					cin >> c; 
-					refer=editor.addAfter(refer, c); 
-					cursor++; 
-					break; }
-		case 'B': {	
-					refer = editor.del(refer);
-					if (cursor > 0) {	
-						cursor--; 
-					}	break; }
-		case 'L': {
-					if (cursor > 0) {
-						refer = refer->pre;
-						cursor--;
-					}	break; }
-		case 'D': {
-					if (cursor < editor.getSize()){
-						refer = refer->next;
-						cursor++;
-					}	 break; }
+		case 'P': {cin >> c; editor.addBefore(cursor + 1, c); cursor++; break; }
+		case 'B': {if (cursor > 0) { editor.delBefore(cursor + 1); cursor--; } break; }
+		case 'L': {if(cursor>0) cursor--; break; }
+		case 'D': {if (cursor < editor.getSize()) cursor++; break; }
 		default: {break;}
 		}		
 	}	
