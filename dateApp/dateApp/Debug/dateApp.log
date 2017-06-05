@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ﻿빌드 시작: 2017-06-03 오전 2:53:53
      1>2 노드의 "C:\Users\Young\git\baekjoon_prob\dateApp\dateApp\dateApp.vcxproj" 프로젝트(Build 대상)입니다.
      1>ClCompile:
@@ -11,3 +12,8 @@
 빌드했습니다.
 
 경과 시간: 00:00:00.99
+=======
+﻿  main.cpp
+  dateApp.vcxproj -> C:\Users\Young\git\baekjoon_prob\dateApp\Debug\dateApp.exe
+  dateApp.vcxproj -> C:\Users\Young\git\baekjoon_prob\dateApp\Debug\dateApp.pdb (Full PDB)
+>>>>>>> refs/remotes/origin/master
