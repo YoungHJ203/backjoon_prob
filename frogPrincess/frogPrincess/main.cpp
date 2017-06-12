@@ -1,6 +1,7 @@
 #include<iostream>
+#include<cstdlib>
 #include<vector>
-#include<algorithm>
+#include<iterator>
 #include<string>
 #include<map>
 
@@ -71,6 +72,9 @@ public:
 	void delNode(lineNode& ref) {
 		ref.prev->next = ref.next;
 		ref.next->prev = ref.prev;
+
+		ref.otherLine->prev->next = ref.otherLine->next;
+		ref.otherLine->next->prev = ref.otherLine->prev;
 
 		ref.~lineNode();
 
