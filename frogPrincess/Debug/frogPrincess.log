@@ -1,0 +1,4 @@
+﻿  main.cpp
+c:\users\young\documents\visual studio 2015\projects\frogprincess\frogprincess\main.cpp(330): warning C4018: '<': signed/unsigned mismatch
+  frogPrincess.vcxproj -> C:\Users\Young\documents\visual studio 2015\Projects\frogPrincess\Debug\frogPrincess.exe
+  frogPrincess.vcxproj -> C:\Users\Young\documents\visual studio 2015\Projects\frogPrincess\Debug\frogPrincess.pdb (Full PDB)

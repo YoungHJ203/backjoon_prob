@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{406657EE-3E6E-4E8C-BC44-67838B76E307}</ProjectGuid>
+    <ProjectGuid>{606C0ECB-4F24-4836-8477-E65A0C653EEE}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>frogPrincess</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
