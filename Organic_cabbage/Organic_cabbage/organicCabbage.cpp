@@ -8,22 +8,22 @@ using namespace std;
 template<class T>
 class treeNode {
 public:
-	treeNode(treeNode* parent= nullptr, treeNode* root=nullptr) {
-		this->root = root;
+	treeNode(treeNode* parent= nullptr, T ele = 0) {
 		this->parent = parent;
 		this->child = new list<treeNode*>(0, 0);
+		this->ele = ele;
 	}
 
 	~treeNode(){
 		delete this->child;
 	}
 
-	void setRoot(treeNode* root) {
-		this->root = root;
+	void setEle(T ele) {
+		this->ele = ele;
 	}
 
-	treeNode* getRoot() {
-		return this->root;
+	T getEle() {
+		return ele;
 	}
 
 	void setParent(treeNode* parent) {
@@ -72,7 +72,7 @@ public:
 	}
 
 private:	
-	treeNode* root;			// back link to root node
+	T ele;					// element of tree
 	treeNode* parent;
 	list<treeNode*> child;
 };
@@ -80,17 +80,8 @@ private:
 template<class T>
 class tree {
 public:
-	tree(treeNode* root = nullptr) {
-		this->root = root;
-	}
-
-	bool hasRoot() {
-		if (this->root != nullptr) {
-			return false;
-		}
-		else {
-			return ture;
-		}
+	tree(T ele = 0) {
+		this->root->ele = ele;
 	}
 
 	void setRoot(treeNode* root) {
@@ -108,7 +99,7 @@ public:
 
 
 private:
-	treeNode* root;
+	treeNode root;
 };
 
 class point {
@@ -138,6 +129,7 @@ int main() {
 	for (int i = 0; i < testCase; i++) {
 		int h = 0, v=0;		// horizontal, vertical length of the farm
 		int num = 0;		// number of cabbages in the farm
+		int setNum = 0;		// numeber of set
 
 		cin >> h >> v >> num;
 		
@@ -154,25 +146,48 @@ int main() {
 			cab.push_back(cabbage);
 		}
 
-		map<int, treeNode<point>> checked;
+		map<double, treeNode<point>* > checked;
 
-		// until there's no point in the list
+		// until there's no point that isn't in a set
 		while (cab.size()) {
 			// pop out the cabbage
 			point* ref = *(cab.begin());
 			cab.pop_front();
 
-			list<treeNode<point>*> toCheck;
+			list<treeNode<point>*> toCheck;	// points near an reference point
 
+			
 			// check the near point
-			for (int k = 0; k < 2; k++) {
-				for (int k2 = 0; k2 < 2;  k2++) {
-				
+			for (int k = 0; k < 4; k++) {
+				double p = 0 ;
+					
+				switch (k)
+				{
+					case 0: {	p = (ref->x - 1) * 100 + ref->y;	break; }
+					case 1: {	p = (ref->x + 1) * 100 + ref->y;	break; }
+					case 2: {	p = ref->x * 100 + (ref->y-1);		break; }
+					case 3: {	p = ref->x * 100 + (ref->y+1);		break; }
+					default:	break;
 				}
+
+				if (checked[p]) {
+					toCheck.push_back(checked[p]);
+				}				
+				
 			}
 
 
 			// check the set of those point near the reference point
+			if (toCheck.empty()) {
+				// make a new set
+				tree* temp
+
+			}
+			else {
+				// check if any two points are in one set
+
+				// 
+			}
 
 
 
