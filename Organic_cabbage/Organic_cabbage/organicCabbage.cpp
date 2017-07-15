@@ -1,45 +1,59 @@
 #include<iostream>
+#include<cstdbool>
 #include<list>
 #include<iterator>
 #include<map>
 
 using namespace std;
 
+class point {
+public:
+	point(int x = 0, int y = 0) {
+		this->x = x;
+		this->y = y;
+	}
+
+	~point() {}
+
+	int x;
+	int y;
+};
+
 template<class T>
 class treeNode {
 public:
-	treeNode(treeNode* parent= nullptr, T ele = 0) {
+	treeNode(treeNode<T>* parent = nullptr, T& ele = NULL) {
 		this->parent = parent;
-		this->child = new list<treeNode*>(0, 0);
-		this->ele = ele;
+		this->ele.x = ele.x;
+		this->ele.y = ele.y;
 	}
 
 	~treeNode(){
 		delete this->child;
 	}
 
-	void setEle(T ele) {
+	void setEle(T& ele) {
 		this->ele = ele;
 	}
 
-	T getEle() {
+	T& getEle() {
 		return ele;
 	}
 
-	void setParent(treeNode* parent) {
+	void setParent(treeNode<T>* parent) {
 		this->parent = parent;
 	}
 
-	treeNode* getParent() {
+	treeNode<T>* getParent() {
 		return this->parent;
 	}
 
-	void addChild(treeNode* child) {
+	void addChild(treeNode<T>* child) {
 		this->child.push_back(child);
 	}
 
-	void deleteChild(treeNode* child) {
-		iterator<list<treeNode*>> childNode = this->child.begin();
+	void deleteChild(treeNode<T>* child) {
+		iterator<list<treeNode<T>*>> childNode = this->child.begin();
 
 		while (childNode != this->child.end()) {
 			if (child == childNode) {
@@ -49,7 +63,7 @@ public:
 		}
 	}
 
-	&list<treeNode*> getChild() {
+	list<treeNode<T>*>& getChild() {
 		return this->child;
 	}
 	
@@ -73,51 +87,20 @@ public:
 
 private:	
 	T ele;					// element of tree
-	treeNode* parent;
-	list<treeNode*> child;
+	treeNode<T>* parent;
+	list<treeNode<T>*> child;
 };
 
 template<class T>
 class tree {
 public:
-	tree(T ele = 0) {
-		this->root->ele = ele;
-	}
-
-	void setRoot(treeNode* root) {
-		this->root = root;
-	}
-
-
-	treeNode* getRoot(treeNode* ref) {
+	static treeNode<T>* getRoot(treeNode<T>* ref) {
 		while (ref->getParent()!=nullptr) {
 			ref = ref->getParent();
 		}
 
 		return ref;
 	}
-
-
-private:
-	treeNode root;
-};
-
-class point {
-public:
-	point() {
-		this->x = 0;
-		this->y = 0;
-	}
-
-	point(int x = 0, int y = 0) {
-		this->x = x;
-		this->y = y;
-	}
-
-	~point() {}
-
-	int x;
-	int y;
 };
 
 int main() {
@@ -148,11 +131,12 @@ int main() {
 
 		map<double, treeNode<point>* > checked;
 
-		// until there's no point that isn't in a set
+		// until there's no point that isn't included in a set
 		while (cab.size()) {
 			// pop out the cabbage
 			point* ref = *(cab.begin());
 			cab.pop_front();
+			double key = ref->x * 100 + ref->y;
 
 			list<treeNode<point>*> toCheck;	// points near an reference point
 
@@ -171,32 +155,55 @@ int main() {
 				}
 
 				if (checked[p]) {
-					toCheck.push_back(checked[p]);
+					list<treeNode<point>*>::iterator it = toCheck.begin();
+
+					while (it!= toCheck.end()) {
+						if (tree<point>::getRoot(*it) == tree<point>::getRoot(checked[p])) {
+							break;
+						}
+							it++;
+					}
+
+					if (it == toCheck.end()) {
+						toCheck.push_back(checked[p]);
+					}
 				}				
 				
 			}
+			
 
+			if (!toCheck.empty()) {
+				treeNode<point>* standard = *(toCheck.begin());
+				list<treeNode<point>*>::iterator it = toCheck.begin();
 
-			// check the set of those point near the reference point
-			if (toCheck.empty()) {
-				// make a new set
-				tree* temp
+				it++;
 
+				standard = tree<point>::getRoot(standard);
+
+				while (it!=toCheck.end()) {
+					tree<point>::getRoot(*it)->setParent(standard);
+
+					it++;
+				}
+
+				treeNode<point>* newNode = new treeNode<point>(standard,*ref);
+
+				checked[key]= newNode;
+
+				setNum = setNum + 1 - (int)toCheck.size();
 			}
 			else {
-				// check if any two points are in one set
+				treeNode<point>* newNode = new treeNode<point>(nullptr, *ref);
 
-				// 
+				checked[key] = newNode;
+
+				setNum++;
 			}
 
-
-
-			// update the previous set and set number
 		}
 
 		// print the number of set
-
-
+		cout << setNum<<endl;
 	}
 
 }
