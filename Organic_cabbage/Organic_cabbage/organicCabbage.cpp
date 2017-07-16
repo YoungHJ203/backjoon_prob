@@ -28,9 +28,7 @@ public:
 		this->ele.y = ele.y;
 	}
 
-	~treeNode(){
-		delete this->child;
-	}
+	~treeNode() {}
 
 	void setEle(T& ele) {
 		this->ele = ele;
@@ -52,8 +50,8 @@ public:
 		this->child.push_back(child);
 	}
 
-	void deleteChild(treeNode<T>* child) {
-		iterator<list<treeNode<T>*>> childNode = this->child.begin();
+	/*void deleteChild(treeNode<T>* child) {
+		list<treeNode<T>*>::iterator childNode = this->child.begin();
 
 		while (childNode != this->child.end()) {
 			if (child == childNode) {
@@ -61,7 +59,7 @@ public:
 			}
 			childNode++;
 		}
-	}
+	}*/
 
 	list<treeNode<T>*>& getChild() {
 		return this->child;
