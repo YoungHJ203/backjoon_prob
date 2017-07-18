@@ -17,7 +17,8 @@ int main() {
 		char c = 0;
 		string code;
 
-		cin.ignore();
+		if(i==0)
+			cin.ignore(1,'\n');
 		getline(cin, code);
 
 		if (codeBreaking(code))
@@ -56,6 +57,13 @@ bool codeBreaking(string& code) {
 			while (code[i]=='1') {
 				i++;
 				count++;
+			}
+
+			if (i + 1 < codeSize) {
+				if (code[i + 1] == '0') {
+					i--;
+					count--;
+				}
 			}
 
 			if (count == 0) {
