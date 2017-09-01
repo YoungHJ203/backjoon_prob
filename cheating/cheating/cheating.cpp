@@ -4,8 +4,12 @@
 #include<set>
 using namespace std;
 
+<<<<<<< HEAD
 void makeSet(vector<vector<bool>>&,map<int, set<int>>&, map<int, int> &,set<int>&,int,int,int);
 int getKey(set<int>&);
+=======
+void makeSet(vector<vector<bool>>&, set<int>&, map<int, set<int>>&, map<int, int>&, int, int, int);
+>>>>>>> da4163451d10147b8cbf63caf48cdb58e14f8328
 int arrangeStudent(vector<vector<bool>>&);
 int max(int, int );
 bool checkIndependent(map<int, set<int>>&, set<int>&);
@@ -68,18 +72,25 @@ int arrangeStudent(vector<vector<bool>>& room) {
 		// find max independant sets
 		for (int j = 0; j < 2; j++) {
 			set<int> studentSet;
+<<<<<<< HEAD
 			makeSet(room, present, presentDT,studentSet, i, j, 0);
+=======
+			
+			makeSet(room, studentSet, present, presentDT,i, j, 0);
+>>>>>>> da4163451d10147b8cbf63caf48cdb58e14f8328
 		}
 
+		
 		// update dynamic table
 		if (i != 0) {
 			map<int,set<int>>::iterator it= present.begin();
 			while (it!=present.end()) {
-				int compareNum = past.size();
+				int studentNum = it->second.size();
 				map<int, set<int>>::iterator pastIt = past.begin();
 				int studentNum = presentDT[it->first];
 
 				while(pastIt!=past.end()){
+<<<<<<< HEAD
 					set<int> temp = it->second;
 
 					set<int>::iterator tempIt = temp.begin();
@@ -91,6 +102,18 @@ int arrangeStudent(vector<vector<bool>>& room) {
 					}
 
 					if (tempIt == temp.end()) {
+=======
+					set<int>::iterator presentIt = it->second.begin();
+					while (presentIt != it->second.end()) {
+						if (pastIt->second.find(*presentIt - 1) != pastIt->second.end() || pastIt->second.find(*presentIt + 1) != pastIt->second.end()) {
+							break;
+						}
+
+						presentIt++;
+					}
+
+					if (presentIt == it->second.end()) {
+>>>>>>> da4163451d10147b8cbf63caf48cdb58e14f8328
 						presentDT[it->first] = max(studentNum+pastDT[pastIt->first],presentDT[it->first]);
 						maxStudent = max(maxStudent, presentDT[it->first]);
 					}
@@ -102,18 +125,33 @@ int arrangeStudent(vector<vector<bool>>& room) {
 			}
 		}
 		else {
+<<<<<<< HEAD
 			map<int, int>::iterator tempIt = presentDT.begin();
 			while (tempIt != presentDT.end()) {
 				maxStudent = max(maxStudent, tempIt->second);
 				tempIt++;
 			}
 		}
+=======
+			map<int, int>::iterator it = presentDT.begin();
+>>>>>>> da4163451d10147b8cbf63caf48cdb58e14f8328
 
+			while (it != presentDT.end()) {
+				maxStudent = max(maxStudent, it->second);
+				it++;
+			}
+		}
 		past = present;
 		pastDT = presentDT;
+<<<<<<< HEAD
 
 		present.clear();
 		presentDT.clear();
+=======
+		present.clear();
+		presentDT.clear();
+
+>>>>>>> da4163451d10147b8cbf63caf48cdb58e14f8328
 	}
 
 	return maxStudent;
@@ -128,13 +166,20 @@ int max(int a, int b) {
 	return b;
 }
 
+<<<<<<< HEAD
 void makeSet(vector<vector<bool>> &room,map<int, set<int>> &present, map<int,int> &presentDT,set<int> &studentSet, int row,int current, int interval) {
 	int size = room[0].size();
 	
+=======
+void makeSet(vector<vector<bool>> &room, set<int> &studentSet, map<int,set<int>> &present, map<int,int> &presentDT,int row,int current,int interval) {
+	int flag = 0;
+
+>>>>>>> da4163451d10147b8cbf63caf48cdb58e14f8328
 	current = current + interval;
 
 	if (room[row][current] != false) {
 		studentSet.insert(current);
+<<<<<<< HEAD
 	}
 
 	if (current + 2 < size) {
@@ -204,4 +249,33 @@ int checkIndependent(map<int,set<int>> &present,int key) {
 	}
 
 	return flag;
+=======
+		flag = 1;
+	}
+
+	if (current + 2 < room[0].size()) {
+		makeSet(room,studentSet,present, presentDT,row,current, 2);
+
+		if (current + 3 < room[0].size()) {
+			makeSet(room, studentSet, present, presentDT,row, current, 3);
+		}
+	}
+	else {
+		int key = 0;
+
+		set<int>::iterator setIt = studentSet.begin();
+		while (setIt!=studentSet.end()) {
+			key = key | (1 << *setIt);
+
+			setIt++;
+		}
+		
+		present[key] = studentSet;
+		presentDT[key] = studentSet.size();
+	}
+
+	if (flag == 1 ) {
+		studentSet.erase(current);
+	}
+>>>>>>> da4163451d10147b8cbf63caf48cdb58e14f8328
 }
